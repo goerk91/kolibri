@@ -1,4 +1,4 @@
-import type { KoliBriTableCell, KoliBriTableDataType, KoliBriTableHeaders, KoliBriTableSelection } from '@public-ui/components';
+import type { KoliBriTableCell, KoliBriTableDataType, KoliBriTableHeaderCellWithLogic, KoliBriTableHeaders, KoliBriTableSelection } from '@public-ui/components';
 import { KolEvent } from '@public-ui/components';
 import type { FC } from 'react';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
@@ -6,6 +6,8 @@ import { useToasterService } from '../../hooks/useToasterService';
 import { getRoot } from '../../shares/react-roots';
 import { createReactRenderElement, KolButton, KolTableStateful, KolTableStateless } from '@public-ui/react';
 import { Button } from '../Button';
+import { OptionalId } from '../interfaces.ts/OptionalId';
+import { ActionColumnHeaderCell, DefaultHeaderCell } from '@public-ui/components/dist/types/schema';
 
 type Data = {
 	id: string;
@@ -51,6 +53,12 @@ const HEADERS: KoliBriTableHeaders = {
 	],
 };
 
+
+
+interface DataTableProps<T extends OptionalId>{
+	actions: 
+}
+
 export const DataTable = () => {
 	const [selectedValue, setSelectedValue] = useState<Data[] | null>();
 
@@ -77,6 +85,16 @@ export const DataTable = () => {
 		getRoot(createReactRenderElement(element)).render(<KolButtonWrapper label={`Click ${cell.data?.name}`} />);
 	};
 
+	const dataColumns:()=> DefaultHeaderCell[] = () => {
+
+				return [{label: 'test'} as DefaultHeaderCell ]
+	};
+
+	const actionColumns:()=>ActionColumnHeaderCell[] = () => {
+
+				return [{label: 'test', actions:} as ActionColumnHeaderCell ]
+	};
+
 	const headers: KoliBriTableHeaders = {
 		horizontal: [[]],
 	};
@@ -91,16 +109,16 @@ export const DataTable = () => {
 				<Button label="Get Data" onClick={handleButtonClick} />
 				<KolTableStateful
 					_label="Table with selection checkboxes"
-					_minWidth="auto"
-					_headers={{
-						horizontal: [
-							[
-								{ key: 'id', label: '#ID', textAlign: 'left' },
-								{ key: 'name', label: 'Name', textAlign: 'right' },
-								{ key: 'action', label: 'Action', textAlign: 'left', render: renderButton },
-							],
-						],
-					}}
+					_headers={{ horizontal: headers }}
+					// _headers={{
+					// 	horizontal: [
+					// 		[
+					// 			{ key: 'id', label: '#ID', textAlign: 'left' },
+					// 			{ key: 'name', label: 'Name', textAlign: 'right' },
+					// 			{ key: 'action', label: 'Action', textAlign: 'left', render: renderButton },
+					// 		],
+					// 	],
+					// }}
 					_allowMultiSort
 					_data={DATA}
 					_selection={selection}
